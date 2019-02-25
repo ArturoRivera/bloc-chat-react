@@ -19,10 +19,15 @@ class RoomList extends Component {
       });
     }
 
-    createRoom() {
+    createRoom(e) {
+      e.preventDefault();
+
       var textInput = document.getElementById("newRoomName");
       var roomName = textInput.value;
-      this.props.firebase.database().ref('rooms/4').set(roomName);
+
+      this.roomsRef.push({
+        roomName
+      });
     }
 
     render() {
@@ -31,10 +36,10 @@ class RoomList extends Component {
             <h3>Room List</h3>
             {
                 this.state.rooms.map(room => {
-                    return <li key={room.key}>{room.value}</li>
+                    return <li key={room.key}>{room.value.roomName}</li>
                 })
             }
-            <form onSubmit={() => this.createRoom()}>
+            <form onSubmit={(e) => this.createRoom(e)}>
                 Create New Room:<br />
                 <input type="text" id="newRoomName"></input>
                 <br />
