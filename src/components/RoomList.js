@@ -6,45 +6,71 @@ class RoomList extends Component {
 
       this.state = {
         rooms: [],
-        text: ''
+        roomName: ""
       };
 
       this.roomsRef = this.props.firebase.database().ref('rooms');
+      this.createRoom = this.createRoom.bind(this);
+      this.handleNewInput = this.handleNewInput.bind(this);
+      this.setActiveRoom = this.props.setActiveRoom.bind(this);
     }
 
     componentDidMount() {
       this.roomsRef.on('child_added', snapshot => {
-        const room = {key: snapshot.key, value: snapshot.val()};
-        this.setState({rooms: this.state.rooms.concat(room) });
+        const room = snapshot.val();
+        room.key = snapshot.key;
+            this.setState({
+              rooms: this.state.rooms.concat(room)
+            });
+      });
+
+      this.setState({
+        roomName: ""
       });
     }
+
+
+    handleNewInput(e) {
+      e.preventDefault();
+      this.setState({
+        roomName: e.target.value
+      });
+    }
+
 
     createRoom(e) {
       e.preventDefault();
 
-      var textInput = document.getElementById("newRoomName");
-      var roomName = textInput.value;
-
       this.roomsRef.push({
-        roomName
+        roomName: this.state.roomName
       });
+
+      this.setState({roomName: ""});
     }
 
+
+    selectRoom (room) {
+      this.props.setActiveRoom(room);
+    }
+
+
     render() {
+        let roomList = this.state.rooms.map((room) =>
+            <p key={room.key} onClick={ (e) => this.selectRoom(room, e) }>{room.roomName}</p>
+        );
+
+        let roomForm = (
+            <form onSubmit={this.createRoom}>
+              <input type="text" value={this.state.roomName} placeholder="Enter Room Name..." onChange={this.handleNewInput} />
+              <input type="submit" value="Add New Room"/>
+            </form>
+        )
+
       return(
         <div>
-            <h3>Room List</h3>
-            {
-                this.state.rooms.map(room => {
-                    return <li key={room.key}>{room.value.roomName}</li>
-                })
-            }
-            <form onSubmit={(e) => this.createRoom(e)}>
-                Create New Room:<br />
-                <input type="text" id="newRoomName"></input>
-                <br />
-                <button type="submit">Submit</button>
-            </form>
+            <h3>{this.props.activeRoom ? this.props.activeRoom.roomName : "Select a Chat Room"}</h3>
+            <ul>{roomList}</ul>
+            <ul>{roomForm}</ul>
         </div>
       )
 
