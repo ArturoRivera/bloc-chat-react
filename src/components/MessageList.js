@@ -62,7 +62,9 @@ class MessageList extends Component {
       render() {
           let currentMessages = (
             this.state.messages.filter(message => message.roomKey === this.props.activeRoom.key).map((message, index) => {
-                  return <p key={message.key}>{message.content}</p>
+                  return (
+                    <p key={message.key}>User: {message.username} | {message.content}</p>
+                  )
             })
           );
 
