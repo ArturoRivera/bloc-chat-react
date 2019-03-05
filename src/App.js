@@ -42,19 +42,24 @@ class App extends Component {
     return (
 
       <div className="App">
-      <h1>Chat Rooms</h1>
-      
-        <RoomList
-        firebase={this.firebase}
-        activeRoom={this.state.activeRoom}
-        setActiveRoom={this.setActiveRoom}
-        />
+          <h1>Chat Rooms</h1>
+            <User
+            firebase={this.firebase}
+            setUser={this.setUser}
+            user={this.state.user}
+            />
 
-        <MessageList
-        firebase={this.firebase}
-        activeRoom={this.state.activeRoom}
-        user={this.state.user}
-        />
+            <RoomList
+            firebase={this.firebase}
+            activeRoom={this.state.activeRoom}
+            setActiveRoom={this.setActiveRoom}
+            />
+
+            <MessageList
+            firebase={this.firebase}
+            activeRoom={this.state.activeRoom}
+            user={this.state.user}
+            />
       </div>
 
     );

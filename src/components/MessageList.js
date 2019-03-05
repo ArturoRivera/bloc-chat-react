@@ -70,9 +70,8 @@ class MessageList extends Component {
             <div>
                 <ul>
                   <form className="newMessage" onSubmit={this.createMessage}>
-                    <h3>New Message</h3>
+                    <h4>New Message</h4>
                     <input type='text' placeholder="Type message here" value={this.state.content} onChange={this.handleNewInput}/>
-                    <br />
                     <button onClick={this.createMessage}>Send</button>
                   </form>
                 </ul>
